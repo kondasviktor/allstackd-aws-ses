@@ -6,7 +6,7 @@ AllStackd is an Amazon SES operations layer for founders, studios, agencies, and
 
 Monitor every Amazon SES account, region, and domain from one workspace. Keep delivery in your AWS account. Use AllStackd’s durable API when you need transactional sending.
 
-> This repository is a public landing page for discoverability. It is **not** the AllStackd product and contains **no source code**, APIs, SDKs, or CloudFormation templates. The product is proprietary and closed-source.
+> This repository is a public landing page for discoverability. It is **not** the AllStackd product and contains **no source code**, APIs, SDKs, or CloudFormation templates. The product is proprietary and closed-source. Specs and examples live on the site docs so they stay in sync with production.
 
 ## What it does
 
@@ -22,6 +22,18 @@ Monitor every Amazon SES account, region, and domain from one workspace. Keep de
 - Freelance developers keeping each client’s SES account apart
 - SaaS teams watching quotas, bounces, and domain health for transactional mail
 
+## Developer surfaces
+
+These are hosted by AllStackd (account + API key required). This repo does not ship client libraries or OpenAPI files — use the docs as the source of truth.
+
+| Surface | What it is | Where to read |
+|---|---|---|
+| **REST API** | Transactional send (`POST /api/v1/emails`), message status, templates, scoped API keys, signed webhooks | [Docs](https://allstackd.com/docs) |
+| **TypeScript SDK** | Thin client helpers for send, status, and template CRUD (copy from docs into your app) | [Docs — TypeScript SDK](https://allstackd.com/docs) |
+| **MCP (beta)** | Agent tools over `https://allstackd.com/api/mcp` with the same Bearer API key (projects, domains, templates, usage, send) | [Docs — MCP beta](https://allstackd.com/docs) |
+
+Typical Control-mode path: connect AWS via CloudFormation → verify a sender domain → leave the SES sandbox if needed → queue sends with an idempotency key → poll status or receive signed delivery events.
+
 ## Start here
 
 | | |
@@ -35,7 +47,7 @@ No card required for the trial. Founder-assisted setup is available.
 
 ## Keywords
 
-Amazon SES · AWS · CloudFormation · transactional email · multi-account SES · SES reputation · DKIM · SES sandbox
+Amazon SES · AWS · CloudFormation · transactional email · multi-account SES · SES reputation · DKIM · SES sandbox · REST API · TypeScript SDK · MCP · email webhooks
 
 ## License
 
