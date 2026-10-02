@@ -34,12 +34,24 @@ These are hosted by AllStackd (account + API key required). This repo does not s
 
 Typical Control-mode path: connect AWS via CloudFormation → verify a sender domain → leave the SES sandbox if needed → queue sends with an idempotency key → poll status or receive signed delivery events.
 
+## Agent plugins
+
+Connector pack (MIT, no product source): [github.com/kondasviktor/allstackd-plugin](https://github.com/kondasviktor/allstackd-plugin)
+
+| Surface | Status |
+|---------|--------|
+| **Cursor** | Submitted to Cursor Marketplace |
+| **Grok Build** | Submitted ([marketplace PR](https://github.com/xai-org/plugin-marketplace/pull/1069)); manual MCP install works today |
+| **Antigravity CLI** | Available via path install from the plugin repo |
+| **Claude / ChatGPT** | Blocked until hosted MCP OAuth ships |
+
 ## Start here
 
 | | |
 |---|---|
 | Product | [https://allstackd.com](https://allstackd.com) |
 | Docs (AWS connection & API) | [https://allstackd.com/docs](https://allstackd.com/docs) |
+| Agent plugin | [https://github.com/kondasviktor/allstackd-plugin](https://github.com/kondasviktor/allstackd-plugin) |
 | 14-day trial | [https://allstackd.com/sign-up](https://allstackd.com/sign-up) |
 | Support | support@allstackd.com |
 
@@ -47,7 +59,7 @@ No card required for the trial. Founder-assisted setup is available.
 
 ## Keywords
 
-Amazon SES · AWS · CloudFormation · transactional email · multi-account SES · SES reputation · DKIM · SES sandbox · REST API · TypeScript SDK · MCP · email webhooks
+Amazon SES · AWS · CloudFormation · transactional email · multi-account SES · SES reputation · DKIM · SES sandbox · REST API · TypeScript SDK · MCP · email webhooks · Cursor · Grok · Antigravity
 
 ## License
 
