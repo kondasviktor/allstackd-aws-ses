@@ -1,66 +1,74 @@
-# AllStackd — Amazon SES operations
+# AllStackd — email for your AWS AI agents
 
 **Product site:** [https://allstackd.com](https://allstackd.com)
 
-AllStackd is an Amazon SES operations layer for founders, studios, agencies, and freelance developers who run more than one product, AWS account, or region.
+Give each of your AI agents its own inbox inside **your** AWS account. Mail arrives through Amazon SES into your S3 bucket, your agent reads it and drafts replies, and **nothing is sent until a person approves it.** SES health monitoring is free.
 
-Monitor every Amazon SES account, region, and domain from one workspace. Keep delivery in your AWS account. Use AllStackd’s durable API when you need transactional sending.
+> This repository is a public landing page for discoverability. It is **not** the AllStackd product and contains **no source code**, APIs or CloudFormation templates. The product is proprietary. The documentation on the site is the source of truth.
 
-> This repository is a public landing page for discoverability. It is **not** the AllStackd product and contains **no source code**, APIs, SDKs, or CloudFormation templates. The product is proprietary and closed-source. Specs and examples live on the site docs so they stay in sync with production.
+## How it works
 
-## What it does
+```
+Sender ──► Amazon SES (your account) ──► S3 (your bucket) ──► AllStackd (metadata only)
+                                                                    │
+Agent (Claude, ChatGPT, Cursor, Grok, your own) ◄── MCP / REST ─────┤
+                                                                    ▼
+                       Draft ──► policy checks ──► person approves ──► SES (your account) ──► Recipient
+```
 
-- **Observe** — See SES identities, DKIM, sandbox status, quotas, and reputation without routing email through AllStackd.
-- **Control** — Add a durable, policy-enforced sending layer project by project while keeping delivery in your AWS account.
-- **Your AWS role** — Connect with a reviewable CloudFormation stack. No long-lived access keys.
-- **Your SES account** — Delivery stays in AWS. AWS bills the sends.
+- **Your AWS account.** Receiving, storage and sending run in your SES and S3. AWS bills them to you.
+- **Metadata only.** AllStackd stores addresses, timestamps and thread structure. Message bodies and attachments are read on demand from your bucket and never stored by AllStackd.
+- **Human approval.** Every reply waits for a person by default. Agents can draft and request a send; they can never approve, change a policy or turn off the kill switch.
+- **Guardrails on the server.** Replies only to people already in the thread, a recipient cap, no BCC or attachments, daily and per-thread limits, secret scanners, loop protection, a reputation breaker and an organization kill switch.
+- **No access keys.** You connect with a reviewable CloudFormation role and an External ID.
 
 ## Who it is for
 
-- Founders and studios tracking identities, quotas, sandbox state, and reputation across products
-- Agencies separating client AWS access and catching health issues before campaigns or releases
-- Freelance developers keeping each client’s SES account apart
-- SaaS teams watching quotas, bounces, and domain health for transactional mail
+- Teams running AI agents on AWS that need to receive and answer email under guardrails
+- Founders who want a support or ops inbox an agent can triage and draft for
+- Builders using Claude, ChatGPT, Cursor, Grok, Strands or AgentCore with their own SES
+
+Not for cold email, purchased lists, bulk marketing or people without an AWS account.
+
+## Plans
+
+Free: 3 inboxes, 1,000 messages a month, SES health monitoring. Builder and Team add inboxes, volume, auto-send to allowlisted recipients, custom policies and audit. See [allstackd.com](https://allstackd.com) for current pricing.
 
 ## Developer surfaces
 
-These are hosted by AllStackd (account + API key required). This repo does not ship client libraries or OpenAPI files — use the docs as the source of truth.
+| Surface | What it is |
+|---|---|
+| **MCP (OAuth)** | `https://allstackd.com/mcp` for Claude, ChatGPT and other clients where a person signs in |
+| **MCP (agent key)** | `https://allstackd.com/api/mcp` with `Authorization: Bearer as_…`, limited to chosen inboxes |
+| **REST API** | `/api/v1` with an OpenAPI description and a TypeScript client |
+| **Webhooks** | Signed events such as `message.received` and `draft.pending_approval`, IDs and metadata only |
 
-| Surface | What it is | Where to read |
-|---|---|---|
-| **REST API** | Transactional send (`POST /api/v1/emails`), message status, templates, scoped API keys, signed webhooks | [Docs](https://allstackd.com/docs) |
-| **TypeScript SDK** | Thin client helpers for send, status, and template CRUD (copy from docs into your app) | [Docs — TypeScript SDK](https://allstackd.com/docs) |
-| **MCP (beta)** | Agent tools over `https://allstackd.com/api/mcp` with the same Bearer API key (projects, domains, templates, usage, send) | [Docs — MCP beta](https://allstackd.com/docs) |
+## Agent plugin
 
-Typical Control-mode path: connect AWS via CloudFormation → verify a sender domain → leave the SES sandbox if needed → queue sends with an idempotency key → poll status or receive signed delivery events.
+Connector pack (MIT, no product source): [github.com/kondasviktor/allstackd-plugin](https://github.com/kondasviktor/allstackd-plugin). It includes the `allstackd-agent-mail` and `allstackd-inbox-triage` skills and configuration for Claude, ChatGPT, Cursor, Grok, Muse, Antigravity, AgentCore and Strands.
 
-## Agent plugins
-
-Connector pack (MIT, no product source): [github.com/kondasviktor/allstackd-plugin](https://github.com/kondasviktor/allstackd-plugin)
-
-| Surface | Status |
-|---------|--------|
-| **Cursor** | Submitted to Cursor Marketplace |
-| **Grok Build** | Submitted ([marketplace PR](https://github.com/xai-org/plugin-marketplace/pull/1069)); manual MCP install works today |
-| **Antigravity CLI** | Available via path install from the plugin repo |
-| **Claude / ChatGPT** | Blocked until hosted MCP OAuth ships |
+| Client | Status |
+|--------|--------|
+| **Claude** | Listed in the Connectors directory (community) |
+| **Cursor** | Listed on cursor.directory |
+| **Grok Build** | Submitted ([marketplace PR](https://github.com/xai-org/plugin-marketplace/pull/1069)); manual MCP install works |
+| **ChatGPT** | Works as a custom connector; directory submission parked |
+| **Antigravity CLI** | Path install from the plugin repo |
 
 ## Start here
 
 | | |
 |---|---|
 | Product | [https://allstackd.com](https://allstackd.com) |
-| Docs (AWS connection & API) | [https://allstackd.com/docs](https://allstackd.com/docs) |
-| Agent plugin | [https://github.com/kondasviktor/allstackd-plugin](https://github.com/kondasviktor/allstackd-plugin) |
-| 14-day trial | [https://allstackd.com/sign-up](https://allstackd.com/sign-up) |
+| Docs | [https://allstackd.com/docs](https://allstackd.com/docs) |
+| Security | [https://allstackd.com/security](https://allstackd.com/security) |
+| Sign up (free, no card) | [https://allstackd.com/sign-up](https://allstackd.com/sign-up) |
 | Support | support@allstackd.com |
-
-No card required for the trial. Founder-assisted setup is available.
 
 ## Keywords
 
-Amazon SES · AWS · CloudFormation · transactional email · multi-account SES · SES reputation · DKIM · SES sandbox · REST API · TypeScript SDK · MCP · email webhooks · Cursor · Grok · Antigravity
+AI agents · agent email · inbox · human-in-the-loop · Amazon SES · AWS · MCP · Claude · ChatGPT · Cursor · Grok · AgentCore · Strands
 
 ## License
 
-AllStackd the product is proprietary. This repository holds marketing copy only and does not grant rights to the SaaS, API, or any implementation. See [https://allstackd.com/terms](https://allstackd.com/terms).
+AllStackd the product is proprietary. This repository holds marketing copy only and does not grant rights to the SaaS, API or any implementation. See [https://allstackd.com/terms](https://allstackd.com/terms).
