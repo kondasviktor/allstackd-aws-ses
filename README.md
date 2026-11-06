@@ -1,8 +1,8 @@
-# AllStackd — email for your AWS AI agents
+# AllStackd — email for your AI agents on AWS
 
 **Product site:** [https://allstackd.com](https://allstackd.com)
 
-Give each of your AI agents its own inbox inside **your** AWS account. Mail arrives through Amazon SES into your S3 bucket, your agent reads it and drafts replies, and **nothing is sent until a person approves it.** SES health monitoring is free.
+Bring any agent (Claude, ChatGPT, Hermes, OpenClaw, Cursor, Codex or your own) and give it its own inbox inside **your** AWS account. Mail arrives through Amazon SES into your S3 bucket, your agent reads it and drafts replies, and **nothing is sent until a person approves it.** SES health monitoring is free.
 
 > This repository is a public landing page for discoverability. It is **not** the AllStackd product and contains **no source code**, APIs or CloudFormation templates. The product is proprietary. The documentation on the site is the source of truth.
 
