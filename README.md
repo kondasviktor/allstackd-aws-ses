@@ -61,6 +61,7 @@ Connector pack (MIT, no product source): [github.com/kondasviktor/allstackd-plug
 |---|---|
 | Product | [https://allstackd.com](https://allstackd.com) |
 | Docs | [https://allstackd.com/docs](https://allstackd.com/docs) |
+| Guides (Strands, AgentCore, DIY SES, approval, prompt injection) | [https://allstackd.com/guides](https://allstackd.com/guides) |
 | Security | [https://allstackd.com/security](https://allstackd.com/security) |
 | Sign up (free, no card) | [https://allstackd.com/sign-up](https://allstackd.com/sign-up) |
 | Support | support@allstackd.com |
